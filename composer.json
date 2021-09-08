@@ -1,6 +1,6 @@
 {
     "name": "lic/sirena-sdk",
-    "description": "Integraci\u0000n con API de Sirena",
+    "description": "Integracion con API de Sirena",
     "type": "library",
     "autoload": {
         "psr-4": {
@@ -20,5 +20,9 @@
         "psr-4": {
             "lic\\sirenasdk\\":"src/"
         }
+    },
+    "require-dev": {
+        "pestphp/pest": "^1.18",
+        "pestphp/pest-plugin-laravel": "^1.1"
     }
 }

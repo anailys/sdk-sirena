@@ -7,25 +7,108 @@ use GuzzleHttp\Psr7;
 
 class Sirenasdk
 {
+
+
+    
+    /**
+     * clientHttp 
+     *
+     * @param string $method
+     * @param string $url
+     * @param array $body
+     * @return json
+     */
+    public function clientHttp( string $method, string $url, array $body) :array
+    {
+        $client = new Client([
+            'headers' => [ 'Content-Type' => 'application/json' ]
+        ]);
+
+        if($method == "GET")
+        {
+            $response = $client->get($url, $body);
+        }
+        else{
+            $response = $client->post($url, $body);
+        }        
+
+        if ($response->getStatusCode() == '200') 
+        {
+            $response = json_decode($response->getBody()->getContents(), TRUE);
+        }else{            
+            $response = ['status'=> $response->getStatusCode()];
+        }
+        
+        return $response;
+    }
+
     /**
      * Get List of Prospects 
      *
      * @param string $url
      * @return json
      */
-    public function getProspects($url){
+
+    public function getProspects(string $url)  : array
+    {
         $client = new Client([
             'headers' => [ 'Content-Type' => 'application/json' ]
         ]);
         
         $response = $client->get($url);
 
-        if ($response->getStatusCode() == '200') //Verifico que me retorne 200 = OK
+        if ($response->getStatusCode() == '200') 
         {
-           // return $response->getBody()->getContents();
-        }else{
-            //return "Algo salió mal";
+            $response = json_decode($response->getBody()->getContents(), TRUE);
+        }else{            
+            $response = ['status'=> $response->getStatusCode()];
         }
+
+        return $response;  
+    }
+
+    /**
+     * Get Prospect
+     *
+     * @param string $url
+     * @param string $prospectId
+     * @return json
+     */
+    public function getProspect(string $url, string $prospectId) :array
+    {
+        $body = ['body' => json_encode(
+                [
+                    'prospectId' => $prospectId
+                ]
+            )];
+
+        $response = $this->clientHttp("GET", $url, $body); 
+
+        return $response;  
+    }
+
+    /**
+     * Get Prospectus
+     *
+     * @param string $url
+     * @return json
+     */
+    public function getChannels( string $url)  :array
+    { 
+        $client = new Client([
+            'headers' => [ 'Content-Type' => 'application/json' ]
+        ]);
+        
+        $response = $client->get($url);
+
+        if ($response->getStatusCode() == '200') 
+        {
+            $response = json_decode($response->getBody()->getContents(), TRUE);
+        }else{            
+            $response = ['status'=> $response->getStatusCode()];
+        }
+
+        return $response;  
 
         return $response->getBody()->getContents();  
     }
@@ -37,81 +120,17 @@ class Sirenasdk
      * @param string $prospectId
      * @return json
      */
-    public function getProspect($url,$prospectId){
-        $client = new Client([
-            'headers' => [ 'Content-Type' => 'application/json' ]
-        ]);
-        
-        $response = $client->get($url,
-            ['body' => json_encode(
-                [
-                    'prospectId' => $prospectId
-                ]
-            )]
-        );
+    public function getChannelsByProspectId(string $url, string $prospectId) :array
+    {
+        $body = ['body' => json_encode(
+            [
+                'prospectId' => $prospectId
+            ]
+        )];
 
-        if ($response->getStatusCode() == '200') //Verifico que me retorne 200 = OK
-        {
-           // return $response->getBody()->getContents();
-        }else{
-            //return "Algo salió mal";
-        }
+        $response = $this->clientHttp("GET", $url, $body); 
 
-        return $response->getBody()->getContents();  
-    }
-
-    /**
-     * Get Prospectus
-     *
-     * @param string $url
-     * @return json
-     */
-    public function getChannels($url){
-        $client = new Client([
-            'headers' => [ 'Content-Type' => 'application/json' ]
-        ]);
-        
-        $response = $client->get($url);
-
-        if ($response->getStatusCode() == '200') //Verifico que me retorne 200 = OK
-        {
-           // return $response->getBody()->getContents();
-        }else{
-            //return "Algo salió mal";
-        }
-
-        return $response->getBody()->getContents();  
-    }
-
-    /**
-     * Get Prospectus
-     *
-     * @param string $url
-     * @param string $prospectId
-     * @return json
-     */
-    public function getChannelsByProspectId($url,$prospectId){
-
-        $client = new Client([
-            'headers' => [ 'Content-Type' => 'application/json' ]
-        ]);
-        
-        $response = $client->get($url,
-            ['body' => json_encode(
-                [
-                    'prospectId' => $prospectId
-                ]
-            )]
-        );
-
-        if ($response->getStatusCode() == '200') //Verifico que me retorne 200 = OK
-        {
-           // return $response->getBody()->getContents();
-        }else{
-            //return "Algo salió mal";
-        }
-
-        return $response->getBody()->getContents();  
+        return $response;  
     }
 
     /**
@@ -121,28 +140,18 @@ class Sirenasdk
      * @param string $key
      * @return json
      */
-    public function sendMessageTemplate($url,$key){
-
-        $client = new Client([
-            'headers' => [ 'Content-Type' => 'application/json' ]
-        ]);
+    public function sendMessageTemplate( string $url, string $key) :array
+    {
         
-        $response = $client->post($url,
-            ['body' => json_encode(
-                [
-                    'key' => $key
-                ]
-            )]
-        );
+        $body = ['body' => json_encode(
+                    [
+                        'key' => $key
+                    ]
+                )];
 
-        if ($response->getStatusCode() == '200') //Verifico que me retorne 200 = OK
-        {
-           // return $response->getBody()->getContents();
-        }else{
-            //return "Algo salió mal";
-        }
+        $response = $this->clientHttp("POST", $url, $body); 
 
-        return $response->getBody()->getContents();      
+        return $response;  
       
     }
 
@@ -153,28 +162,18 @@ class Sirenasdk
      * @param string $content
      * @return json
      */
-    public function sendMessage($url,$content){
+    public function sendMessage( string $url, string $content)  :array
+    {
 
-        $client = new Client([
-            'headers' => [ 'Content-Type' => 'application/json' ]
-        ]);
-        
-        $response = $client->post($url,
-            ['body' => json_encode(
-                [
-                    'content' => $content
-                ]
-            )]
-        );
+        $body = ['body' => json_encode(
+            [
+                'content' => $content
+            ]
+        )];
 
-        if ($response->getStatusCode() == '200') //Verifico que me retorne 200 = OK
-        {
-           // return $response->getBody()->getContents();
-        }else{
-            //return "Algo salió mal";
-        }
+        $response = $this->clientHttp("POST", $url, $body); 
 
-        return $response->getBody()->getContents();      
+        return $response;      
       
     }
 
@@ -185,41 +184,32 @@ class Sirenasdk
      * @param string $providerId
      * @return json
      */
-    public function createInteractionByProspectId($url,$providerId,$content){
+    public function createInteractionByProspectId(string $url, string $providerId, string $content)  :array
+    {
 
-        $client = new Client([
-            'headers' => [ 'Content-Type' => 'application/json' ]
-        ]);
+        $body = ['body' => json_encode(
+            [
+                'type' => "note",
+                'providerId' => $providerId,
+                'threadTitle' => "Prueba",
+                'threadUrl' => "threadUrl",
+                'question' => "Probando Nota",
+                'answer' => "answer",
+                'delivered' => true,
+                'cancelReason' => "cancelReason",
+                'utmSource' => "google, newsletter4, billboard, ford, bmw",
+                'startedAt' => "2019-08-24T14:15:22Z",
+                'duration' => 30000,
+                'recordingUrl' => "https://s3.amazonaws.com/recordings_2013/d38b5ff0-5752-4cc1-82ba-e1210232c8d5.mp3",
+                'content' => $content,
+                'sender' => "sender"
+            ]
+        )];
+
+        $response = $this->clientHttp("POST", $url, $body); 
         
-        $response = $client->post($url,
-            ['body' => json_encode(
-                [
-                    'type' => "note",
-                    'providerId' => $providerId,
-                    'threadTitle' => "Prueba",
-                    'threadUrl' => "threadUrl",
-                    'question' => "Probando Nota",
-                    'answer' => "answer",
-                    'delivered' => true,
-                    'cancelReason' => "cancelReason",
-                    'utmSource' => "google, newsletter4, billboard, ford, bmw",
-                    'startedAt' => "2019-08-24T14:15:22Z",
-                    'duration' => 30000,
-                    'recordingUrl' => "https://s3.amazonaws.com/recordings_2013/d38b5ff0-5752-4cc1-82ba-e1210232c8d5.mp3",
-                    'content' => $content,
-                    'sender' => "sender"
-                ]
-            )]
-        );
 
-        if ($response->getStatusCode() == '200') //Verifico que me retorne 200 = OK
-        {
-           // return $response->getBody()->getContents();
-        }else{
-            //return "Algo salió mal";
-        }
-
-        return $response->getBody()->getContents();      
+        return $response;       
       
     }
     
