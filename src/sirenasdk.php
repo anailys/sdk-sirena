@@ -1,14 +1,16 @@
 <?php 
 
-namespace lic\sirenasdk;
+namespace lic\SirenaSdk;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 
-class Sirenasdk
+class SirenaSdk
 {
 
-
+    private const GET = "GET";
+    private const POST = "POST";
     
     /**
      * clientHttp 
@@ -18,27 +20,55 @@ class Sirenasdk
      * @param array $body
      * @return json
      */
-    public function clientHttp( string $method, string $url, array $body) :array
+    public function clientHttp( string $method, string $url,  $body = null) :array
     {
         $client = new Client([
             'headers' => [ 'Content-Type' => 'application/json' ]
         ]);
 
-        if($method == "GET")
-        {
-            $response = $client->get($url, $body);
-        }
-        else{
-            $response = $client->post($url, $body);
-        }        
+        try {
+            if ($method == self::GET) {
+                if ($body==null) {
+                    $response = $client->get($url);
+                } else {
+                    $response = $client->get($url, $body);
+                }
+            } else {
+                if ($body==null) {
+                    $response = $client->post($url);
+                } else {
+                    $response = $client->post($url, $body);
+                }
+            }
 
-        if ($response->getStatusCode() == '200') 
-        {
-            $response = json_decode($response->getBody()->getContents(), TRUE);
-        }else{            
-            $response = ['status'=> $response->getStatusCode()];
+            //return [$response->getStatusCode()];
+         
+            switch($response->getStatusCode()){
+                case '404':{
+                    throw new Exception('Error del servidor');
+                    break;
+                }
+                case '500':{
+    
+                    throw new Exception('Error del servidor');
+                    break;
+                }
+                case '200':{
+    
+                    $response = json_decode($response->getBody()->getContents(), true);
+                    break;
+                }
+                
+
+            }
+
+            
+
+        }catch(Exception $e){
+            echo 'test';
+            $response = ['Menssagge' => $e->getMessage()]; 
         }
-        
+
         return $response;
     }
 
@@ -49,20 +79,9 @@ class Sirenasdk
      * @return json
      */
 
-    public function getProspects(string $url)  : array
+    public function getProspects(string $url)  
     {
-        $client = new Client([
-            'headers' => [ 'Content-Type' => 'application/json' ]
-        ]);
-        
-        $response = $client->get($url);
-
-        if ($response->getStatusCode() == '200') 
-        {
-            $response = json_decode($response->getBody()->getContents(), TRUE);
-        }else{            
-            $response = ['status'=> $response->getStatusCode()];
-        }
+        $response = $this->clientHttp(self::GET, $url); 
 
         return $response;  
     }
@@ -82,7 +101,7 @@ class Sirenasdk
                 ]
             )];
 
-        $response = $this->clientHttp("GET", $url, $body); 
+        $response = $this->clientHttp(self::GET, $url, $body); 
 
         return $response;  
     }
@@ -95,22 +114,9 @@ class Sirenasdk
      */
     public function getChannels( string $url)  :array
     { 
-        $client = new Client([
-            'headers' => [ 'Content-Type' => 'application/json' ]
-        ]);
-        
-        $response = $client->get($url);
-
-        if ($response->getStatusCode() == '200') 
-        {
-            $response = json_decode($response->getBody()->getContents(), TRUE);
-        }else{            
-            $response = ['status'=> $response->getStatusCode()];
-        }
+        $response = $this->clientHttp(self::GET, $url); 
 
         return $response;  
-
-        return $response->getBody()->getContents();  
     }
 
     /**
@@ -128,7 +134,7 @@ class Sirenasdk
             ]
         )];
 
-        $response = $this->clientHttp("GET", $url, $body); 
+        $response = $this->clientHttp(self::GET, $url, $body); 
 
         return $response;  
     }
@@ -149,7 +155,7 @@ class Sirenasdk
                     ]
                 )];
 
-        $response = $this->clientHttp("POST", $url, $body); 
+        $response = $this->clientHttp(self::POST, $url, $body); 
 
         return $response;  
       
@@ -171,7 +177,7 @@ class Sirenasdk
             ]
         )];
 
-        $response = $this->clientHttp("POST", $url, $body); 
+        $response = $this->clientHttp(self::POST, $url, $body); 
 
         return $response;      
       
@@ -206,7 +212,7 @@ class Sirenasdk
             ]
         )];
 
-        $response = $this->clientHttp("POST", $url, $body); 
+        $response = $this->clientHttp(self::POST, $url, $body); 
         
 
         return $response;       
