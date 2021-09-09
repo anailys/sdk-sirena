@@ -1,2 +1,2 @@
 /vendor/
-composer.lock
+composer.lock # Remove this one after you create a project
