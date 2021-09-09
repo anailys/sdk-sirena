@@ -5,6 +5,7 @@ namespace lic\SirenaSdk;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
+use GuzzleHttp\Exception\RequestException;
 
 class SirenaSdk
 {
@@ -20,7 +21,7 @@ class SirenaSdk
      * @param array $body
      * @return json
      */
-    public function clientHttp( string $method, string $url,  $body = null) :array
+    public function clientHttp( string $method, string $url,  $body = null) 
     {
         $client = new Client([
             'headers' => [ 'Content-Type' => 'application/json' ]
@@ -40,36 +41,22 @@ class SirenaSdk
                     $response = $client->post($url, $body);
                 }
             }
-
-            //return [$response->getStatusCode()];
-         
-            switch($response->getStatusCode()){
-                case '404':{
-                    throw new Exception('Error del servidor');
-                    break;
-                }
-                case '500':{
-    
-                    throw new Exception('Error del servidor');
-                    break;
-                }
-                case '200':{
-    
-                    $response = json_decode($response->getBody()->getContents(), true);
-                    break;
-                }
-                
-
+            if ($response->getStatusCode()!='200') {
+                throw new Exception("Error! - ".$response->getStatusCode());
             }
-
             
 
-        }catch(Exception $e){
-            echo 'test';
-            $response = ['Menssagge' => $e->getMessage()]; 
+            $response = json_decode($response->getBody()->getContents(), true);
+            return $response;
+
+        }catch(RequestException  $e){
+         
+          
+            $response = $e->getResponse()->getStatusCode();
+            //return ['message'=>$e->getResponse()->getStatusCode()];
         }
 
-        return $response;
+        
     }
 
     /**
@@ -93,7 +80,7 @@ class SirenaSdk
      * @param string $prospectId
      * @return json
      */
-    public function getProspect(string $url, string $prospectId) :array
+    public function getProspect(string $url, string $prospectId) 
     {
         $body = ['body' => json_encode(
                 [
