@@ -41,18 +41,27 @@ class SirenaSdk
                     $response = $client->post($url, $body);
                 }
             }
-            if ($response->getStatusCode()!='200') {
-                throw new Exception("Error! - ".$response->getStatusCode());
-            }
             
+            if ($response->getStatusCode()=='404') {
+                throw new Exception("Error, dirección no encontrada! - ".$response->getStatusCode());
+            }
+            if ($response->getStatusCode()=='500') {
+                throw new Exception("Error del servidor! - ".$response->getStatusCode());
+            }
 
-            $response = json_decode($response->getBody()->getContents(), true);
+            $response = ['status_code' => $response->getStatusCode(),
+                                     'data' => $response->getBody()->getContents()];
+            dd($response);
             return $response;
 
-        }catch(RequestException  $e){
+        }catch(RequestException $e){
          
           
-            $response = $e->getResponse()->getStatusCode();
+            // $response = $e->getResponse()->getStatusCode();
+            $response = json_encode(['status_code' => $e->getResponse()->getStatusCode(),
+                                     'data' => $e->getMessage()
+                        ]);
+           dd($response);
             //return ['message'=>$e->getResponse()->getStatusCode()];
         }
 
