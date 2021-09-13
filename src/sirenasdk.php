@@ -14,7 +14,7 @@ class SirenaSdk
     private const POST = "POST";
     
     /**
-     * clientHttp 
+     * clientHttp: Es la función encargada de instanciar el cliente de Guzzle para permitir consumir servicios.
      *
      * @param string $method
      * @param string $url
@@ -51,7 +51,7 @@ class SirenaSdk
 
             $response = ['status_code' => $response->getStatusCode(),
                                      'data' => $response->getBody()->getContents()];
-            dd($response);
+           // dd($response);
             return $response;
 
         }catch(RequestException $e){
@@ -61,7 +61,7 @@ class SirenaSdk
             $response = json_encode(['status_code' => $e->getResponse()->getStatusCode(),
                                      'data' => $e->getMessage()
                         ]);
-           dd($response);
+           //dd($response);
             //return ['message'=>$e->getResponse()->getStatusCode()];
         }
 
@@ -69,7 +69,7 @@ class SirenaSdk
     }
 
     /**
-     * Get List of Prospects 
+     * Get List of Prospects: Nos permite consumir el servicio de getProspects de Sirena y es para listar la información de todos los contantos con los que tenemos una conversación en Sierena. 
      *
      * @param string $url
      * @return json
@@ -83,7 +83,7 @@ class SirenaSdk
     }
 
     /**
-     * Get Prospect
+     * Get Prospect: Nos permite consumir el servicio de getProspect de Sirena y es para obtenerla información de tun contanto con los que tenemos una conversación en Sierena según si prospectID.
      *
      * @param string $url
      * @param string $prospectId
@@ -103,12 +103,12 @@ class SirenaSdk
     }
 
     /**
-     * Get Prospectus
+     * getChannels: Nos permite obtener los canales de comunicación y sus plantillas
      *
      * @param string $url
      * @return json
      */
-    public function getChannels( string $url)  :array
+    public function getChannels( string $url)  
     { 
         $response = $this->clientHttp(self::GET, $url); 
 
@@ -116,13 +116,13 @@ class SirenaSdk
     }
 
     /**
-     * Get Prospectus
+     * getChannelsByProspectId: Nos permite acceder  a los canales de comunicación disponibles para una conversación, segun el prospectID.
      *
      * @param string $url
      * @param string $prospectId
      * @return json
      */
-    public function getChannelsByProspectId(string $url, string $prospectId) :array
+    public function getChannelsByProspectId(string $url, string $prospectId) 
     {
         $body = ['body' => json_encode(
             [
@@ -136,13 +136,13 @@ class SirenaSdk
     }
 
     /**
-     * Post sendMessageTemplate
+     * Post sendMessageTemplate: Para enviar una plantilla a un prospect
      *
      * @param string $url
      * @param string $key
      * @return json
      */
-    public function sendMessageTemplate( string $url, string $key) :array
+    public function sendMessageTemplate( string $url, string $key) 
     {
         
         $body = ['body' => json_encode(
@@ -158,13 +158,13 @@ class SirenaSdk
     }
 
     /**
-     * Post sendMessage
+     * Post sendMessage: Para envias un mensaje conversacional a un prospect determinado
      *
      * @param string $url
      * @param string $content
      * @return json
      */
-    public function sendMessage( string $url, string $content)  :array
+    public function sendMessage( string $url, string $content)  
     {
 
         $body = ['body' => json_encode(
@@ -180,13 +180,13 @@ class SirenaSdk
     }
 
     /**
-     * Post sendMessage
+     * Post createInteractionByProspectId: Nos permite enviar una nota interna a una conversación determinada.
      *
      * @param string $url
      * @param string $providerId
      * @return json
      */
-    public function createInteractionByProspectId(string $url, string $providerId, string $content)  :array
+    public function createInteractionByProspectId(string $url, string $providerId, string $content)  
     {
 
         $body = ['body' => json_encode(
