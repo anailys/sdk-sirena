@@ -12,6 +12,7 @@ class SirenaSdk
 
     private const GET = "GET";
     private const POST = "POST";
+    private const APIKEY = "Yf9EkNsI4w5NFCo5r8w3r30F6P1oi2O7";
     
     /**
      * clientHttp: Es la función encargada de instanciar el cliente de Guzzle para permitir consumir servicios.
