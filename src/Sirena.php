@@ -1,13 +1,13 @@
 <?php 
 
-namespace lic\SirenaSdk;
+namespace Sirena;
 
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\RequestException;
 
-class SirenaSdk
+class Sirena
 {
 
     private const GET = "GET";

@@ -6,8 +6,8 @@ test('Send a message to the user through the WhatsApp channel', function () {
     $idProspect = "611ece4f7b7ca40008e979ad";
     $urlChannels = "https://api.getsirena.com/v1/messaging/channels?api-key=".$apiKey;
     
-    $sirenasdk = new lic\SirenaSdk\SirenaSdk();
-    $result = $sirenasdk->getChannelsByProspectId($urlChannels,$idProspect);
+    $sirena = new Sirena\Sirena();
+    $result = $sirena->getChannelsByProspectId($urlChannels,$idProspect);
     
     $this->assertTrue(is_array($result));
 

@@ -9,8 +9,8 @@ test('Send a message to the user through the WhatsApp channel', function () {
     
 
 
-    $sirenasdk = new lic\SirenaSdk\SirenaSdk();
-    $result = $sirenasdk->createInteractionByProspectId($urlsendNote,$idProspect,$contentNota);
+    $sirena = new Sirena\Sirena();
+    $result = $sirena->createInteractionByProspectId($urlsendNote,$idProspect,$contentNota);
     
     $this->assertTrue(is_array($result));
 

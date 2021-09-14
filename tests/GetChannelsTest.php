@@ -5,8 +5,8 @@ test('Get whatsapp channel template', function () {
     $apiKey = "Yf9EkNsI4w5NFCo5r8w3r30F6P1oi2O7";
     $urlChannels = "https://api.getsirena.com/v1/messaging/channels?api-key=".$apiKey;
 
-    $sirenasdk = new lic\SirenaSdk\SirenaSdk();
-    $result = $sirenasdk->getChannels($urlChannels) ;
+    $sirena = new Sirena\Sirena();
+    $result = $sirena->getChannels($urlChannels) ;
     
     $this->assertTrue(is_array($result));
 
@@ -18,9 +18,9 @@ test('Error getting templates for WhatsApp channel', function () {
     $apiKey = "Yf9EkNsI4w5NFCo5r8w3r30F6P1oi2O7";
     $urlChannels = "https://api.getsirena.com/v1/messaging/channels?api-key=".$apiKey;
 
-    $sirenasdk = new lic\SirenaSdk\SirenaSdk();
+    $sirena = new Sirena\Sirena();
     
-    $result = $sirenasdk->getChannels($urlChannels) ;
+    $result = $sirena->getChannels($urlChannels) ;
     
     $this->assertTrue(is_array($result));
 

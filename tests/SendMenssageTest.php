@@ -8,8 +8,8 @@ test('Send a message to the user through the WhatsApp channel', function () {
     $content = "Hola Ana es un placer enviar un menssaje conversacional";
     $urlsendMessage = "https://api.getsirena.com/v1/prospect/".$idProspect."/messaging/".$chanel."?api-key=".$apiKey;
 
-    $sirenasdk = new lic\SirenaSdk\SirenaSdk();
-    $result = $sirenasdk->sendMessage($urlsendMessage, $content);
+    $sirena = new Sirena\Sirena();
+    $result = $sirena->sendMessage($urlsendMessage, $content);
     
     $this->assertTrue(is_array($result));
 

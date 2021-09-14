@@ -2,6 +2,11 @@
     "name": "lic/sirena-sdk",
     "description": "Integracion con API de Sirena",
     "type": "library",
+    "autoload":{
+        "psr-4": {
+            "Sirena\\":"src/"
+        }
+    },
     "authors": [
         {
             "name": "VMC Subastas",
@@ -10,12 +15,7 @@
     ],
     "require": {
         "guzzlehttp/guzzle": "^7.3"
-    },
-    "autoload":{
-        "psr-4": {
-            "lic\\SirenaSdk\\":"src/"
-        }
-    },
+    },    
     "require-dev": {
         "pestphp/pest": "^1.18",
         "pestphp/pest-plugin-laravel": "^1.1"
