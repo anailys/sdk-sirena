@@ -1,7 +1,7 @@
 # SdkSirena
 
-## Nueva instancia de la clase Sirena
-$sirenasdk = new lic\SirenaSdk\SirenaSdk();
+## Instalación
+composer require sdksirena/sdk-sirena
 
 ## Prospecto
 - Conversasiones en el canal de WhatasApp
