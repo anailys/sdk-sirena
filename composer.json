@@ -1,5 +1,5 @@
 {
-    "name": "lic/sdk-sirena",
+    "name": "sdksirena/sdk-sirena",
     "description": "Integracion con API de Sirena",
     "type": "library",
     "autoload":{
