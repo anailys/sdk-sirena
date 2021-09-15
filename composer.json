@@ -1,5 +1,5 @@
 {
-    "name": "sdksirena/sdk-sirena",
+    "name": "sdksirena/sdksirena",
     "description": "Integracion con API de Sirena",
     "type": "library",
     "autoload":{
